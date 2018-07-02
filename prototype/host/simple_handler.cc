@@ -3,6 +3,7 @@
 // can be found in the LICENSE file.
 
 #include "simple_handler.h"
+#include "MessageHandler.h"
 
 #include <sstream>
 #include <string>
@@ -20,8 +21,8 @@ SimpleHandler* g_instance = NULL;
 
 }  // namespace
 
-SimpleHandler::SimpleHandler(bool use_views)
-    : use_views_(use_views), is_closing_(false) {
+SimpleHandler::SimpleHandler(bool use_views, const CefString& startup_url)
+    : use_views_(use_views), startup_url_(startup_url), is_closing_(false) {
   DCHECK(!g_instance);
   g_instance = this;
 }
@@ -34,6 +35,16 @@ SimpleHandler::~SimpleHandler() {
 SimpleHandler* SimpleHandler::GetInstance() {
   return g_instance;
 }
+
+bool SimpleHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+	CefProcessId source_process,
+	CefRefPtr<CefProcessMessage> message) {
+	CEF_REQUIRE_UI_THREAD();
+
+	return message_router_->OnProcessMessageReceived(browser, source_process,
+		message);
+}
+
 
 void SimpleHandler::OnTitleChange(CefRefPtr<CefBrowser> browser,
                                   const CefString& title) {
@@ -56,6 +67,16 @@ void SimpleHandler::OnTitleChange(CefRefPtr<CefBrowser> browser,
 
 void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
+
+  if (!message_router_) {
+	  // Create the browser-side router for query handling.
+	  CefMessageRouterConfig config;
+	  message_router_ = CefMessageRouterBrowserSide::Create(config);
+
+	  // Register handlers with the router.
+	  message_handler_.reset(new MessageHandler(startup_url_));
+	  message_router_->AddHandler(message_handler_.get(), false);
+  }
 
   // Add to the list of existing browsers.
   browser_list_.push_back(browser);

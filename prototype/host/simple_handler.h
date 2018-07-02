@@ -6,15 +6,17 @@
 #define CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
 
 #include "include/cef_client.h"
+#include "include/wrapper/cef_message_router.h"
 
 #include <list>
 
 class SimpleHandler : public CefClient,
                       public CefDisplayHandler,
                       public CefLifeSpanHandler,
-                      public CefLoadHandler {
+                      public CefLoadHandler,
+					  public CefRequestHandler {
  public:
-  explicit SimpleHandler(bool use_views);
+  explicit SimpleHandler(bool use_views, const CefString& startup_url);
   ~SimpleHandler();
 
   // Provide access to the single global instance of this object.
@@ -28,6 +30,10 @@ class SimpleHandler : public CefClient,
     return this;
   }
   virtual CefRefPtr<CefLoadHandler> GetLoadHandler() OVERRIDE { return this; }
+  CefRefPtr<CefRequestHandler> GetRequestHandler() OVERRIDE { return this; }
+  bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+	  CefProcessId source_process,
+	  CefRefPtr<CefProcessMessage> message) OVERRIDE;
 
   // CefDisplayHandler methods:
   virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
@@ -51,6 +57,11 @@ class SimpleHandler : public CefClient,
   bool IsClosing() const { return is_closing_; }
 
  private:
+
+	 CefRefPtr<CefMessageRouterBrowserSide> message_router_;
+	 scoped_ptr<CefMessageRouterBrowserSide::Handler> message_handler_;
+	 const CefString startup_url_;
+
   // Platform-specific implementation.
   void PlatformTitleChange(CefRefPtr<CefBrowser> browser,
                            const CefString& title);

@@ -70,9 +70,6 @@ void SimpleApp::OnContextInitialized() {
   const bool use_views = false;
 #endif
 
-  // SimpleHandler implements browser-level callbacks.
-  CefRefPtr<SimpleHandler> handler(new SimpleHandler(use_views));
-
   // Specify CEF browser settings here.
   CefBrowserSettings browser_settings;
 
@@ -83,6 +80,10 @@ void SimpleApp::OnContextInitialized() {
   url = command_line->GetSwitchValue("url");
   if (url.empty())
     url = "http://www.google.com";
+
+  // SimpleHandler implements browser-level callbacks.
+  CefRefPtr<SimpleHandler> handler(new SimpleHandler(use_views, url));
+
 
   if (use_views) {
     // Create the BrowserView.

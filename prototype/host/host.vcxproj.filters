@@ -36,6 +36,9 @@
     <ClInclude Include="simple_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MessageHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -66,5 +69,8 @@
     <Image Include="host.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="index.html" />
   </ItemGroup>
 </Project>

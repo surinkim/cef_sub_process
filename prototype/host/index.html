@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<script language="JavaScript">
+
+    function OnClickButton() {
+        window.cefQuery({
+            request: 'button_click',
+            onSuccess: function (response) {
+                document.getElementById('result').value = 'Response: ' + response;
+            },
+            onFailure: function (error_code, error_message) {
+            }
+        });
+
+    }
+
+</script>
+
+</head>
+
+
+
+<body>
+      <button onclick="OnClickButton();">Click</button>
+      <br/>
+      <textarea rows="1" cols="30" id="result"></textarea>  
+</body>
+
+</html>

@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="host.h" />
+    <ClInclude Include="MessageHandler.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="simple_app.h" />
     <ClInclude Include="simple_handler.h" />
@@ -217,6 +218,9 @@
   <ItemGroup>
     <Image Include="host.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="index.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "sub.h"
+#include "RendererApp.h"
 
 #include "include/cef_app.h"
 
@@ -34,9 +35,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	
 	// Provide CEF with command-line arguments.
 	CefMainArgs main_args(hInstance);
+
+	// Optional implementation of the CefApp interface.
+	CefRefPtr<RendererApp> app(new RendererApp);
 	
 	// Execute the sub-process logic. This will block until the sub-process should exit.
-	return CefExecuteProcess(main_args, nullptr, nullptr);
+	return CefExecuteProcess(main_args, app.get(), nullptr);
 }
 
 
