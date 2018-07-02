@@ -13,6 +13,11 @@
 *.userprefs
 
 # Build results
+bin/
+GPUCache/
+obj/
+lib/
+
 
 
 # Visual Studio 2015/2017 cache/options directory
